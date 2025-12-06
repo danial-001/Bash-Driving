@@ -784,7 +784,7 @@ function App() {
             <ul>
               <li>📞 07855 595 078</li>
               <li>✉️ info@bashdrivingschool.com</li>
-              <li>📍 Greater Manchester & Oldham</li>
+              <li>📍 19 Clover Hall Crescent Rochdale OL16 2TR</li>
               <li>🕒 Mon - Sun: 8am - 8pm</li>
             </ul>
           </div>
