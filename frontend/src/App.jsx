@@ -351,7 +351,7 @@ function App() {
             <div className="premium-card" onClick={() => scrollToSection('booking')}>
               <div className="card-icon">🎯</div>
               <h4 className="card-title">Test Ready Package</h4>
-              <div className="card-price">£320</div>
+              <div className="card-price">£300</div>
               <p className="card-description">
                 10 comprehensive lessons + full mock test with detailed feedback.
               </p>
@@ -404,7 +404,7 @@ function App() {
             <div className="pricing-card featured" onClick={() => scrollToSection('booking')}>
               <span className="pricing-badge">Most Popular</span>
               <h4 className="pricing-title">10-Hour Block</h4>
-              <div className="pricing-price">£320</div>
+              <div className="pricing-price">£300</div>
               <ul className="card-features">
                 <li>Save £20 off regular price</li>
                 <li>10 consecutive lessons</li>
