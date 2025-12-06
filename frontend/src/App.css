@@ -2430,6 +2430,42 @@ main {
   .nav-links { background: #fff !important; }
   .nav-links button { color: #1a1a1a !important; font-weight: 600; }
 }
+
+/* Tablet (768–1024px): keep desktop-style navbar, no full-screen drawer */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .menu-toggle {
+    display: none !important;
+  }
+
+  .nav-shell {
+    padding: 1rem 2rem;
+  }
+
+  .nav-wrapper {
+    justify-content: space-between;
+  }
+
+  .nav-links {
+    position: static;
+    height: auto;
+    width: auto;
+    flex-direction: row;
+    padding: 0;
+    gap: 0.5rem;
+    box-shadow: none;
+    background: transparent !important;
+  }
+
+  .nav-links.open::before {
+    content: none !important;
+  }
+
+  .nav-links button {
+    width: auto;
+    text-align: center;
+    padding: 0.6rem 0.9rem;
+  }
+}
 /* === Hero Buttons & Chips Library (warm orange→pink theme) === */
 :root {
   --grad-hero: var(--gradient-primary, linear-gradient(135deg, #ff6b6b 0%, #ffa94d 100%));
