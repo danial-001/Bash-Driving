@@ -336,7 +336,7 @@ function App() {
             <div className="premium-card" onClick={() => scrollToSection('booking')}>
               <div className="card-icon">🌱</div>
               <h4 className="card-title">Beginner Package</h4>
-              <div className="card-price">£35<span className="pricing-period">/hour</span></div>
+              <div className="card-price">£32<span className="pricing-period"> per hour – pricing starts from £32</span></div>
               <p className="card-description">
                 Perfect for new learners. Master the fundamentals with patient, expert instruction.
               </p>
@@ -391,7 +391,7 @@ function App() {
           <div className="pricing-grid">
             <div className="pricing-card" onClick={() => scrollToSection('booking')}>
               <h4 className="pricing-title">Hourly Lessons</h4>
-              <div className="pricing-price">£35<span className="pricing-period">/hr</span></div>
+              <div className="pricing-price">£32<span className="pricing-period"> per hour – pricing starts from £32</span></div>
               <ul className="card-features">
                 <li>Pay as you go flexibility</li>
                 <li>Manual or automatic</li>
