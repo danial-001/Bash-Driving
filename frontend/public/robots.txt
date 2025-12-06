@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bashdriving.co.uk/sitemap.xml
+Host: bashdriving.co.uk
