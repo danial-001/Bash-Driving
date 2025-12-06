@@ -1504,6 +1504,45 @@ main {
   }
 }
 
+/* Tablet-only (portrait + small landscape) refinements */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .section {
+    padding: 4rem 2rem;
+  }
+
+  .hero {
+    padding: 4rem 2rem 5rem;
+  }
+
+  .hero-container {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: var(--spacing-xl);
+  }
+
+  .hero-content {
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .hero-cta {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .card-grid,
+  .testimonial-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pricing-grid {
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+  }
+
+  .success-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 900px) {
   .hero-content h1 {
     font-size: 2.75rem;
