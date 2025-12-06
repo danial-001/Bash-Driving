@@ -782,7 +782,7 @@ function App() {
           <div className="footer-column">
             <h5>Contact Info</h5>
             <ul>
-              <li>📞 07855 595 078</li>
+              <li>📞 +44 7855 595078</li>
               <li>✉️ info@bashdrivingschool.com</li>
               <li>📍 19 Clover Hall Crescent Rochdale OL16 2TR</li>
               <li>🕒 Mon - Sun: 8am - 8pm</li>
