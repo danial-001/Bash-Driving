@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import logo from './assets/logo.jpeg'
 import instructorBg from './assets/instructor.jpg'
@@ -10,176 +10,128 @@ import success05 from './assets/success-05.jpeg'
 import success06 from './assets/success-06.jpeg'
 import success07 from './assets/success-07.jpeg'
 import success08 from './assets/success-08.jpeg'
+import success09 from './assets/success-09.jpeg'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000'
-
-const navLinks = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'services', label: 'Services' },
-  { id: 'cards', label: 'Courses' },
-  { id: 'areas', label: 'Areas' },
-  { id: 'price', label: 'Pricing' },
-  { id: 'testimonial', label: 'Reviews' },
-  { id: 'success', label: 'Success Wall' },
-  { id: 'blog', label: 'Blog' },
-  { id: 'contact', label: 'Contact' },
-]
-
-const heroStats = [
-  { label: 'Learners Trained', value: '2.5k+' },
-  { label: 'Avg. First-Time Pass', value: '87%' },
-  { label: 'Cities Covered', value: '14' },
-]
-
-const successPhotos = [
-  { name: 'Amelia B.', detail: 'Passed in Rochdale • Manual', image: success01 },
-  { name: 'Imran S.', detail: 'First-time pass • Automatic', image: success02 },
-  { name: 'Naiema K.', detail: 'Mock-test champion', image: success03 },
-  { name: 'Syeeda L.', detail: 'Confidence refresher', image: success04 },
-  { name: 'Yusuf D.', detail: 'Fast-track intensive', image: success05 },
-  { name: 'Haroon M.', detail: 'Route-ready in Oldham', image: success06 },
-  { name: 'Hiba R.', detail: 'Motorway-ready grad', image: success07 },
-  { name: 'Tariq J.', detail: 'Manual license secured', image: success08 },
-]
-
-const services = [
-  {
-    title: 'Manual & Automatic',
-    detail:
-      'Flexible pick-up locations, dual-control vehicles, and DVSA-approved instructors for both transmissions.',
-  },
-  {
-    title: 'Fast Pass Intensives',
-    detail: 'Condensed lesson blocks inspired by driving.org for learners who need to pass quickly.',
-  },
-  {
-    title: 'Mock Test & Route Prep',
-    detail: 'Full mock tests with feedback, local test-route practice, and nerves coaching.',
-  },
-  {
-    title: 'Block Booking (10 hrs)',
-    detail: 'Secure ten consecutive lessons from £300 depending on your area. Ideal for committed learners.',
-  },
-]
-
-const lessonCards = [
-  {
-    title: 'Starter Discovery',
-    price: '£35 / hr',
-    blurb: 'Two calm orientation sessions to learn the cockpit drill, moving off and clutch control.',
-  },
-  {
-    title: 'Pass Guarantee Plan',
-    price: '£399',
-    blurb: 'Ten focused lessons plus a full mock test and feedback notebook to accelerate progress.',
-  },
-  {
-    title: 'Pass Plus',
-    price: '£40 / hr',
-    blurb: 'Night, motorway, and all-weather driving so you stay confident after the test.',
-  },
-]
-
-const areaList = [
-  'Rochdale',
-  'Heywood',
-  'Oldham',
-  'Royton',
-  'Chadderton',
-  'Manchester',
-  'Bury',
-  'Bacup',
-  'Middleton',
-  'Nearby towns & villages',
-]
-
-const locationHighlights = [
-  { name: 'Rochdale', detail: 'Manual & auto lessons across OL11 / OL12' },
-  { name: 'Manchester', detail: 'City-centre pick up plus Salford Quays' },
-  { name: 'Bury', detail: 'Routes through Pimhole, Fishpool, Walshaw' },
-  { name: 'Oldham', detail: 'Royton, Chadderton, and Saddleworth roads' },
-  { name: 'Middleton', detail: 'M60 corridor, Mills Hill, Langley' },
-  { name: 'Bacup', detail: 'Pennine lanes and hill-start coaching' },
-]
-
-const priceHighlights = [
-  { title: 'Pay As You Go', value: '£35/hr', detail: 'Manual or automatic, weekday or weekend.' },
-  { title: '10 Hour Block', value: '£330', detail: 'Save £20 when you learn consistently.' },
-  { title: 'Refresher', value: '£120', detail: '3 bespoke sessions to rebuild confidence.' },
-]
-
-const testimonials = [
-  {
-    quote:
-      'Bash made parallel parking feel effortless. I passed first time at the Cheetham Hill test centre.',
-    name: 'Safiya K.',
-  },
-  {
-    quote:
-      'Clear feedback after every lesson and super flexible with my shift work schedule.',
-    name: 'Daniel W.',
-  },
-]
-
-const blogPosts = [
-  {
-    title: 'Top 5 Manoeuvres You Must Master',
-    date: 'Nov 15, 2025',
-    blurb: 'Emergency stops, bay parking, and more explained in plain language.',
-  },
-  {
-    title: 'Choosing Manual vs Automatic Lessons',
-    date: 'Nov 9, 2025',
-    blurb: 'Pros, cons, and how they affect test readiness in Greater Manchester.',
-  },
-]
-
-const contactTypes = ['Manual Lessons', 'Automatic Lessons', 'Intensive Course', 'Pass Plus']
-
-const socialLinks = [
-  {
-    label: 'TikTok',
-    url: 'https://www.tiktok.com/@bashdriving?_r=1&_t=ZS-91iyh34ObRM',
-    icon: (
-      <svg viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M20 4c1.2 2.3 3.4 3.8 6 4v4.1c-2.2-0.1-4.2-0.7-6-1.8v9.5c0 4.5-3.6 8.2-8 8.2S4 24.3 4 19.8c0-4.4 3.6-8 8-8 0.4 0 0.8 0 1.2 0.1v4.4c-0.4-0.1-0.8-0.2-1.2-0.2-2.1 0-3.8 1.7-3.8 3.8s1.7 3.9 3.8 3.9 3.8-1.7 3.8-3.8V4h4.2z" />
-      </svg>
-    ),
-  },
-  {
-    label: 'Facebook',
-    url: 'https://www.facebook.com/bashdrivingschool',
-    icon: (
-      <svg viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M18 11.5V9.2c0-1 0.7-1.9 1.7-1.9H22V3h-3.1C14.8 3 13 5.5 13 8.8v2.7H10v4h3v13h5v-13h3.3l0.7-4H18z" />
-      </svg>
-    ),
-  },
-]
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || (typeof window !== 'undefined' ? '' : 'http://localhost:4000')
 
 function App() {
+  const [formStep, setFormStep] = useState(1)
   const [formStatus, setFormStatus] = useState({ type: 'idle', message: '' })
   const [navOpen, setNavOpen] = useState(false)
+  const [mapOverlay, setMapOverlay] = useState({ open: false, city: '', query: '' })
+  const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const testimonials = [
+    { name: 'Yachya Grittner', text: "I couldn't be more happier with my driving instructor, Waqas. I passed on my first attempt.", stars: 5 },
+    { name: 'Muhammad Yaaseen', text: "Waqas challenges you to the best you can be. Highly recommended. Pass my test first time with him. If your looking for a driving instructor this is the big name in the game.", stars: 5 },
+    { name: 'Xiaofeng Yang', text: 'Waqas is a brilliant driving insturtor. I passed with only 4 minors. He explain everything easily and patiently and make driving much more easier and fun. Would definitely recommend!', stars: 5 },
+    { name: 'Maheen Syeda', text: "Thank you to Waqas for helping me pass my driving test in first attempt. it wasn\'t possible without your teaching and supervision. your help has been much appreciated!!", stars: 5 },
+    { name: 'Osman Ahmed', text: 'Many thanks to Waqas Bashir, what he have done to me is really amazing, I managed to pass my driving test from the 1st attempt, very good instructor, Many thanks', stars: 5 },
+    { name: 'Rashid Amin', text: 'Passed first time with 3 minors with the help of my instructor Waqas. Was a very good instructor and helped me get prepared for the test. Highly recommended', stars: 5 },
+    { name: 'Tyler Berry', text: 'Waqas bashir was an amazing teacher taught me really well helping me to pass first time with only 1 minor, amazing and positive thank you', stars: 5 },
+    { name: 'Adil Aziz', text: 'Waqas was an amazing instructor and helped me pass my driving test on the first try. When I started I was struggling a lot and he helped me really fast and made me more confident.', stars: 5 },
+    { name: 'zishan zafar', text: 'I passed first time! With my instructor Waqas. He was amazing! Calm in soo many situations where I know I others would pull their hair out. Taught me everything I needed to know and got me over my nerves and lack of confidence. Amazing instructor. Highly recommend', stars: 5 },
+    { name: 'Ronnie Smith', text: "Couldn\'t fault my driving instructor waqas at all made me feel comfortable and confident covered all the basics and every manoeuvre through out my lessons and passed 1st time can\'t thank him enough", stars: 5 },
+    { name: 'hasan tamasar', text: "Best driving instructor Waqas helped me a lot from starting till finishing. Highly recommend. Passed my driving test with 2 driving fault\'s. Love bro", stars: 5 },
+  ];
+  const duplicatedTestimonials = testimonials.concat(testimonials);  const [theme, setTheme] = useState(() => {
+    // Check localStorage or system preference
+    const savedTheme = localStorage.getItem('theme')
+    if (savedTheme) return savedTheme
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  })
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    lessonType: '',
+    address: '',
+    availability: '',
+    message: ''
+  })
 
-  const smoothScroll = (id) => {
-    const el = document.getElementById(id)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
+  // Apply theme on mount and when it changes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  // Auto-advance testimonials every 5s
+  useEffect(() => {
+    if (!testimonials?.length) return
+    const id = setInterval(() => {
+      setCurrentTestimonial((i) => (i + 1) % testimonials.length)
+    }, 5000)
+    return () => clearInterval(id)
+  }, [testimonials?.length])
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light')
   }
 
-  const handleNavClick = (id) => {
-    smoothScroll(id)
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
     setNavOpen(false)
   }
 
-  const handleContactSubmit = async (event) => {
-    event.preventDefault()
-    const form = event.currentTarget
-    const formData = new FormData(form)
-    const payload = Object.fromEntries(formData.entries())
-    setFormStatus({ type: 'loading', message: 'Sending...' })
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const validateStep = (step) => {
+    if (step === 1) {
+      if (!formData.name || !formData.email || !formData.phone) {
+        setFormStatus({ type: 'error', message: 'Please fill in all required fields.' })
+        return false
+      }
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(formData.email)) {
+        setFormStatus({ type: 'error', message: 'Please enter a valid email address.' })
+        return false
+      }
+      // Phone validation (UK + Pakistan format)
+      const phoneRegex = /^(\+44\d{10}|07\d{9}|\+92\d{10}|03\d{9}|0\d{10})$/
+      const cleanedPhone = formData.phone.replace(/\s/g, '')
+      
+      if (!phoneRegex.test(cleanedPhone)) {
+        setFormStatus({ 
+          type: 'error', 
+          message: 'Please enter a valid phone number (UK: 07xxx or +44xxx, Pakistan: 03xxx or +92xxx)' 
+        })
+        return false
+      }
+    }
+    if (step === 2) {
+      if (!formData.lessonType || !formData.address) {
+        setFormStatus({ type: 'error', message: 'Please fill in all required fields.' })
+        return false
+      }
+    }
+    setFormStatus({ type: 'idle', message: '' })
+    return true
+  }
+
+  const nextStep = () => {
+    if (validateStep(formStep)) {
+      setFormStep(prev => Math.min(prev + 1, 3))
+    }
+  }
+
+  const prevStep = () => {
+    setFormStatus({ type: 'idle', message: '' })
+    setFormStep(prev => Math.max(prev - 1, 1))
+  }
+
+  const handleBookingSubmit = async (e) => {
+    e.preventDefault()
+    setFormStatus({ type: 'loading', message: 'Sending your request...' })
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/contact`, {
@@ -187,364 +139,693 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formData),
       })
 
       if (!response.ok) {
         throw new Error('Failed request')
       }
 
-      form.reset()
-      setFormStatus({ type: 'success', message: 'Sent! We will reply soon.' })
+      setFormStatus({ type: 'success', message: '✓ Booking request sent successfully! We\'ll contact you within 24 hours.' })
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        lessonType: '',
+        address: '',
+        availability: '',
+        message: ''
+      })
+      setFormStep(1)
     } catch (error) {
       console.error(error)
       setFormStatus({
         type: 'error',
-        message: 'Unable to send right now. Please try again shortly.',
+        message: 'Unable to send request. Please call us directly at 07855 595 078.',
       })
     }
   }
 
   return (
     <div className="site">
-      <header className="top-banner">
-        <p>DVSA Approved Instructors • Same-day callbacks</p>
-        <div className="banner-actions">
-          <a href="tel:07855595078">07855 595 078</a>
-          <span>info@bashdrivingschool.com</span>
-        </div>
-      </header>
-
-      <div className="nav-shell">
+      {/* Navigation */}
+      <nav className="nav-shell">
         <div className="nav-wrapper">
-          <div className="brand-pill" onClick={() => handleNavClick('home')}>
-            <img src={logo} alt="Bash Driving School logo" />
+          <div className="brand-pill" onClick={() => scrollToSection('home')}>
+            <img src={logo} alt="Bash Driving School" />
             <div>
-              <span>Since 2012</span>
+              <span>EST. 2012 • DVSA APPROVED</span>
               <h1>Bash Driving School</h1>
             </div>
           </div>
-          <nav className={`nav-links ${navOpen ? 'open' : ''}`}>
-            {navLinks.map((link) => (
-              <button key={link.id} type="button" onClick={() => handleNavClick(link.id)}>
-                {link.label}
-              </button>
-            ))}
-          </nav>
+          <div className={`nav-links ${navOpen ? 'open' : ''}`}>
+            <button onClick={() => scrollToSection('home')}>Home</button>
+            <button onClick={() => scrollToSection('about')}>About</button>
+            <button onClick={() => scrollToSection('services')}>Services</button>
+            <button onClick={() => scrollToSection('courses')}>Courses</button>
+            <button onClick={() => scrollToSection('pricing')}>Pricing</button>
+            <button onClick={() => scrollToSection('areas')}>Areas</button>
+            <button onClick={() => scrollToSection('testimonials')}>Reviews</button>
+            <button onClick={() => scrollToSection('success')}>Success Stories</button>
+          </div>
         </div>
         <div className="nav-actions">
-          <button className="btn secondary" type="button" onClick={() => handleNavClick('contact')}>
-            Book a lesson
-          </button>
-          <button
-            className={`menu-toggle ${navOpen ? 'active' : ''}`}
-            type="button"
-            aria-label="Toggle navigation"
-            aria-expanded={navOpen}
-            onClick={() => setNavOpen((prev) => !prev)}
+          <button 
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
           >
-            <span />
-            <span />
-            <span />
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+          <button className="btn btn-primary" onClick={() => scrollToSection('booking')}>
+            Book Your Lesson
+          </button>
+          <button 
+            className={`menu-toggle ${navOpen ? 'active' : ''}`}
+            onClick={() => setNavOpen(!navOpen)}
+            aria-label="Toggle menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
         </div>
-        <div className={`nav-overlay ${navOpen ? 'show' : ''}`} onClick={() => setNavOpen(false)} />
-      </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section id="home" className="hero">
+        <div className="hero-container">
+          <div className="hero-content fade-in">
+            <h1>Pass Your Driving Test with Confidence & Expert Skill</h1>
+            <p className="hero-subtitle">
+              Professional DVSA-approved instruction across Greater Manchester. 
+              Learn with patient, experienced instructors in modern dual-control vehicles. 
+              Manual & Automatic lessons available 7 days a week.
+            </p>
+            <div className="hero-cta">
+              <button className="btn btn-glass" onClick={() => scrollToSection('booking')}>
+                <svg className="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 16v-5a5 5 0 0110 0v5h2v3H5v-3h2z"/></svg>
+                Book First Lesson
+              </button>
+              <button className="btn btn-glass" onClick={() => scrollToSection('pricing')}>
+                <svg className="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 11h14l-1 9H6zM7 6h10l1 5H6z"/></svg>
+                View Packages
+              </button>
+            </div>
+            
+          </div>
+          <div className="hero-image fade-in">
+            <img src={instructorBg} alt="Professional driving instruction" />
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="stats-section">
+        <div className="stats-container">
+          <div className="stat-card">
+            <div className="stat-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05C16.69 13.84 18 14.88 18 16.5V19h6v-2.5c0-2.33-4.67-3.5-8-3.5z"/></svg>
+            </div>
+            <div className="stat-value">2,500+</div>
+            <div className="stat-label">Students Trained</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 14h-2v-4H7v-2h6z"/></svg>
+            </div>
+            <div className="stat-value">87%</div>
+            <div className="stat-label">First-Time Pass Rate</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14zm0-12H5V6h14z"/></svg>
+            </div>
+            <div className="stat-value">12+</div>
+            <div className="stat-label">Years of Excellence</div>
+          </div>
+        </div>
+      </section>
 
       <main>
-        <section id="home" className="hero section">
-          <div className="hero-grid">
-            <div className="hero-content">
-              <div className="hero-copy">
-                <p className="tag">Inspired by UK’s favourite schools</p>
-                <h2>Confident driving starts with structured coaching.</h2>
-                <p>
-                  We blend the proven flow of driving.org with Bash Driving School personality—giving
-                  you lesson plans, progress tracking, and upbeat instructors who won’t let nerves win.
-                  Manual or automatic, we tailor every hour to how you learn best.
-                </p>
-                <div className="cta-row">
-                  <a className="btn primary" href="#contact">
-                    Schedule a callback
-                  </a>
-                  <a className="btn ghost" href="#services">
-                    View lesson menu
-                  </a>
-                </div>
-              </div>
-              <div className="hero-media">
-                <div className="floating-card accent">
-                  <h4>98% recommend us</h4>
-                  <p>Verified Google reviews from learners across Manchester and Oldham.</p>
-                </div>
-                <div className="floating-card">
-                  <h4>Lesson blocks</h4>
-                  <ul>
-                    <li>Block booking 10 hours (£300*)</li>
-                    <li>Mock tests with dashcam feedback</li>
-                    <li>Home / work pick-up</li>
-                  </ul>
-                  <small>*Area dependent</small>
-                </div>
-              </div>
-            </div>
-            <div className="hero-image">
-              <img src={instructorBg} alt="Bash Driving School instructor with learner" />
-              <div className="image-pill top">DVSA Approved Team</div>
-              <div className="image-pill bottom">Same-day callbacks</div>
-            </div>
-          </div>
-          <div className="stats-grid">
-            {heroStats.map((stat) => (
-              <article key={stat.label}>
-                <strong>{stat.value}</strong>
-                <span>{stat.label}</span>
-              </article>
-            ))}
+        {/* About Section */}
+        <section id="about" className="section">
+          <div className="section-header">
+            <span className="section-tag">About Us</span>
+            <h2 className="section-title">Professional Driving Instruction You Can Trust</h2>
+            <p className="section-subtitle">
+              Since 2012, Bash Driving School has been the premier choice for learner drivers across Greater Manchester. 
+              Our DVSA-approved instructors provide patient, professional instruction in modern, well-maintained vehicles. 
+              Every student receives personalized lesson plans, detailed progress tracking, and continuous support throughout their learning journey.
+            </p>
           </div>
         </section>
 
-        <section id="about" className="section about">
+        {/* Services Section */}
+        <section id="services" className="section">
           <div className="section-header">
-            <p className="tag">About Us</p>
-            <h3>Local instructors, national-standard polish.</h3>
-          </div>
-          <p>
-            Every learner receives a lesson journal, milestone targets, and a WhatsApp progress wrap
-            so you and your parents always know what is next. Vehicles are refreshed yearly and are
-            equipped with the latest safety tech.
-          </p>
-        </section>
-
-        <section id="services" className="section services">
-          <div className="section-header">
-            <p className="tag">Services</p>
-            <h3>Driving.org-inspired lesson experiences</h3>
-          </div>
-          <div className="service-grid">
-            {services.map((service, index) => (
-              <article key={service.title} className="service-card" style={{ animationDelay: `${index * 120}ms` }}>
-                <span className="service-chip">0{index + 1}</span>
-                <h4>{service.title}</h4>
-                <p>{service.detail}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="cards" className="section">
-          <div className="section-header">
-            <p className="tag">Courses</p>
-            <h3>Pick a card that matches your journey</h3>
+            <span className="section-tag">Our Services</span>
+            <h2 className="section-title">Comprehensive Driving Instruction</h2>
+            <p className="section-subtitle">Professional lessons tailored to your learning style and pace</p>
           </div>
           <div className="card-grid">
-            {lessonCards.map((card, index) => (
-              <article key={card.title} style={{ animationDelay: `${index * 120}ms` }}>
-                <div className="card-front">
-                  <h4>{card.title}</h4>
-                  <p className="price">{card.price}</p>
-                </div>
-                <div className="card-back">
-                  <h4>{card.title}</h4>
-                  <p>{card.blurb}</p>
-                </div>
-              </article>
-            ))}
+            <div className="premium-card">
+              <div className="card-icon">🚗</div>
+              <h4 className="card-title">Manual & Automatic Lessons</h4>
+              <p className="card-description">
+                Learn in modern dual-control vehicles with experienced DVSA-approved instructors. 
+                Choose between manual or automatic transmission based on your preference.
+              </p>
+            </div>
+            <div className="premium-card">
+              <div className="card-icon">⚡</div>
+              <h4 className="card-title">Intensive Fast-Track Courses</h4>
+              <p className="card-description">
+                Need to pass quickly? Our intensive courses offer condensed, focused instruction 
+                designed to get you test-ready in the shortest time possible.
+              </p>
+            </div>
+            <div className="premium-card">
+              <div className="card-icon">✅</div>
+              <h4 className="card-title">Mock Tests & Route Practice</h4>
+              <p className="card-description">
+                Experience real test conditions with detailed feedback. Practice on actual test 
+                routes to build confidence and familiarity before your big day.
+              </p>
+            </div>
+            <div className="premium-card">
+              <div className="card-icon">📦</div>
+              <h4 className="card-title">Block Booking Packages</h4>
+              <p className="card-description">
+                Save money with our 10-hour block bookings. Perfect for committed learners who 
+                want consistency and the best value for their investment.
+              </p>
+            </div>
           </div>
         </section>
 
+        {/* Courses Section */}
+        <section id="courses" className="section">
+          <div className="section-header">
+            <span className="section-tag">Courses</span>
+            <h2 className="section-title">Choose Your Learning Package</h2>
+            <p className="section-subtitle">Click any package to start your booking</p>
+          </div>
+          <div className="card-grid">
+            <div className="premium-card" onClick={() => scrollToSection('booking')}>
+              <div className="card-icon">🌱</div>
+              <h4 className="card-title">Beginner Package</h4>
+              <div className="card-price">£35<span className="pricing-period">/hour</span></div>
+              <p className="card-description">
+                Perfect for new learners. Master the fundamentals with patient, expert instruction.
+              </p>
+              <ul className="card-features">
+                <li>Flexible scheduling</li>
+                <li>Door-to-door pick-up</li>
+                <li>Progress tracking</li>
+                <li>Patient instruction</li>
+              </ul>
+              <a href="#booking" className="card-cta">Book Now →</a>
+            </div>
+            <div className="premium-card" onClick={() => scrollToSection('booking')}>
+              <div className="card-icon">🎯</div>
+              <h4 className="card-title">Test Ready Package</h4>
+              <div className="card-price">£399</div>
+              <p className="card-description">
+                10 comprehensive lessons + full mock test with detailed feedback.
+              </p>
+              <ul className="card-features">
+                <li>10 structured lessons</li>
+                <li>Full mock test included</li>
+                <li>Detailed progress reports</li>
+                <li>Test route practice</li>
+              </ul>
+              <a href="#booking" className="card-cta">Book Now →</a>
+            </div>
+            <div className="premium-card" onClick={() => scrollToSection('booking')}>
+              <div className="card-icon">🏆</div>
+              <h4 className="card-title">Pass Plus Advanced</h4>
+              <div className="card-price">£40<span className="pricing-period">/hour</span></div>
+              <p className="card-description">
+                Post-test confidence building. Master motorway and challenging conditions.
+              </p>
+              <ul className="card-features">
+                <li>Motorway driving</li>
+                <li>Night driving skills</li>
+                <li>All-weather training</li>
+                <li>Advanced techniques</li>
+              </ul>
+              <a href="#booking" className="card-cta">Book Now →</a>
+            </div>
+          </div>
+        </section>
+
+        {/* Pricing Section */}
+        <section id="pricing" className="section">
+          <div className="section-header">
+            <span className="section-tag">Pricing</span>
+            <h2 className="section-title">Transparent, Competitive Rates</h2>
+            <p className="section-subtitle">Choose the package that suits your needs and budget</p>
+          </div>
+          <div className="pricing-grid">
+            <div className="pricing-card" onClick={() => scrollToSection('booking')}>
+              <h4 className="pricing-title">Hourly Lessons</h4>
+              <div className="pricing-price">£35<span className="pricing-period">/hr</span></div>
+              <ul className="card-features">
+                <li>Pay as you go flexibility</li>
+                <li>Manual or automatic</li>
+                <li>Available 7 days a week</li>
+                <li>Door-to-door service</li>
+                <li>Progress tracking included</li>
+              </ul>
+              <button className="btn btn-primary" style={{width: '100%', border: '1px solid white'}}>Select Package</button>
+            </div>
+            <div className="pricing-card featured" onClick={() => scrollToSection('booking')}>
+              <span className="pricing-badge">Most Popular</span>
+              <h4 className="pricing-title">10-Hour Block</h4>
+              <div className="pricing-price">£330</div>
+              <ul className="card-features">
+                <li>Save £20 off regular price</li>
+                <li>10 consecutive lessons</li>
+                <li>Structured learning plan</li>
+                <li>Priority booking</li>
+                <li>Mock test option</li>
+              </ul>
+              <button className="btn btn-primary" style={{width: '100%'}}>Select Package</button>
+            </div>
+            <div className="pricing-card" onClick={() => scrollToSection('booking')}>
+              <h4 className="pricing-title">Refresher Course</h4>
+              <div className="pricing-price">£120</div>
+              <ul className="card-features">
+                <li>3-lesson package</li>
+                <li>Rebuild confidence</li>
+                <li>Refresh your skills</li>
+                <li>Ideal for returning drivers</li>
+                <li>Personalized focus areas</li>
+              </ul>
+              <button className="btn btn-primary" style={{width: '100%'}}>Select Package</button>
+            </div>
+          </div>
+          <div style={{textAlign: 'center', marginTop: 'var(--spacing-xl)', color: 'var(--text-secondary)'}}>
+            <p>💡 <strong>Note:</strong> Click any pricing option to continue with your booking</p>
+          </div>
+        </section>
+
+        {/* Areas Covered */}
         <section id="areas" className="section">
           <div className="section-header">
-            <p className="tag">Areas Covered</p>
-            <h3>Greater Manchester & Oldham corridors</h3>
+            <span className="section-tag">Service Areas</span>
+            <h2 className="section-title">Serving Greater Manchester & Surrounding Areas</h2>
+            <p className="section-subtitle">Professional instruction available across the region</p>
           </div>
-          <div className="location-grid">
-            {locationHighlights.map((spot) => (
-              <article key={spot.name} className="location-card">
-                <div className="location-icon" aria-hidden="true">
-                  <svg viewBox="0 0 32 32">
-                    <path d="M16 3c-5 0-9 4-9 9 0 7 9 17 9 17s9-10 9-17c0-5-4-9-9-9zm0 12.2c-1.8 0-3.2-1.4-3.2-3.2S14.2 8.8 16 8.8s3.2 1.4 3.2 3.2S17.8 15.2 16 15.2z" />
+          <div className="card-grid">
+            {[
+              { name: 'Rochdale'  , map: 'Rochdale,+UK' },
+              { name: 'Manchester', map: 'Manchester,+UK' },
+              { name: 'Bury', map: 'Bury,+Greater+Manchester,+UK' },
+              { name: 'Oldham', map: 'Oldham,+UK' },
+              { name: 'Middleton', map: 'Middleton,+Greater+Manchester,+UK' },
+              { name: 'Bacup', map: 'Bacup,+UK' }
+            ].map((area) => (
+              <button 
+                key={area.name}
+                className="premium-card area-card"
+                onClick={() => setMapOverlay({ open: true, city: area.name, query: area.map })}
+                title={`View ${area.name} map`}
+              >
+                <div className="card-icon" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#EA4335" d="M12 2c3.87 0 7 3.13 7 7 0 5.25-7 13-7 13S5 14.25 5 9c0-3.87 3.13-7 7-7z"/>
+                    <path fill="#4285F4" d="M12 2.6v3.2A3.2 3.2 0 0 1 15.2 9H18.4A6.4 6.4 0 0 0 12 2.6z"/>
+                    <path fill="#34A853" d="M12 2.6V5.8A3.2 3.2 0 0 0 8.8 9H5.6A6.4 6.4 0 0 1 12 2.6z"/>
+                    <path fill="#FBBC05" d="M12 15.4V12.2A3.2 3.2 0 0 1 8.8 9H5.6A6.4 6.4 0 0 0 12 15.4z"/>
+                    <circle cx="12" cy="9" r="3.2" fill="#FFFFFF"/>
                   </svg>
                 </div>
-                <div>
-                  <h4>{spot.name}</h4>
-                  <p>{spot.detail}</p>
-                </div>
-              </article>
+                <h4 className="card-title">{area.name}</h4>
+                <p className="card-description">{area.detail}</p>
+              </button>
             ))}
           </div>
         </section>
 
-        <section id="price" className="section">
+        {/* Testimonials */}
+        <section id="testimonials" className="section">
           <div className="section-header">
-            <p className="tag">Pricing</p>
-            <h3>Fair, transparent lesson rates</h3>
+            <span className="section-tag">Reviews</span>
+            <h2 className="section-title">What Our Students Say</h2>
+            <p className="section-subtitle">Real feedback from our learners</p>
           </div>
-          <div className="price-grid">
-            {priceHighlights.map((item) => (
-              <article key={item.title}>
-                <div className="price-front">
-                  <h4>{item.title}</h4>
-                  <p className="value">{item.value}</p>
-                </div>
-                <div className="price-back">
-                  <h4>{item.title}</h4>
-                  <p>{item.detail}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
 
-        <section id="testimonial" className="section testimonials">
-          <div className="section-header">
-            <p className="tag">Reviews</p>
-            <h3>Learners highlight our calm energy</h3>
-          </div>
-          <div className="testimonial-grid">
-            {testimonials.map((item) => (
-              <blockquote key={item.name}>
-                <p>“{item.quote}”</p>
-                <cite>{item.name}</cite>
-              </blockquote>
-            ))}
-          </div>
-        </section>
-
-        <section id="success" className="section success-gallery">
-          <div className="section-header">
-            <p className="tag">Success Wall</p>
-            <h3>Faces of freshly passed licences</h3>
-            <p>We celebrate every handshake, every certificate, and every proud new driver.</p>
-          </div>
-          <div className="success-grid">
-            {successPhotos.map((item) => (
-              <figure key={item.name}>
-                <img src={item.image} alt={item.name} loading="lazy" />
-                <figcaption>
-                  <strong>{item.name}</strong>
-                  <span>{item.detail}</span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </section>
-
-        <section id="blog" className="section blog">
-          <div className="section-header">
-            <p className="tag">Blog</p>
-            <h3>Guides for learners & parents</h3>
-          </div>
-          <div className="blog-grid">
-            {blogPosts.map((post) => (
-              <article key={post.title}>
-                <h4>{post.title}</h4>
-                <small>{post.date}</small>
-                <p>{post.blurb}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="contact" className="section contact">
-          <div className="section-header">
-            <p className="tag">Contact</p>
-            <h3>Send a message</h3>
-          </div>
-          <form className="contact-form" onSubmit={handleContactSubmit}>
-            <label>
-              Your Name (required)
-              <input name="name" type="text" placeholder="Enter your name" required />
-            </label>
-            <label>
-              Your Email (required)
-              <input name="email" type="email" placeholder="name@example.com" required />
-            </label>
-            <label>
-              Your Phone Number (required)
-              <input name="phone" type="tel" placeholder="07855 595 078" required />
-            </label>
-            <label>
-              Select Your Type (required)
-              <select name="lessonType" required defaultValue="">
-                <option value="" disabled>
-                  — Please choose an option —
-                </option>
-                {contactTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Your Full Address (required)
-              <textarea
-                name="address"
-                rows={3}
-                placeholder="House number, street, town, postcode"
-                required
-              />
-            </label>
-            <label>
-              Mention your availability
-              <input name="availability" type="text" placeholder="Weekdays after 5pm" />
-            </label>
-            <label>
-              Message
-              <textarea name="message" rows={4} placeholder="How can we help?" />
-            </label>
-            <button className="btn primary" type="submit">
-              Submit enquiry
+          <div className="testimonial-carousel">
+            <button
+              className="tc-nav prev"
+              aria-label="Previous review"
+              onClick={() => setCurrentTestimonial((i) => (i - 1 + testimonials.length) % testimonials.length)}
+            >
+              ‹
             </button>
-            {formStatus.type !== 'idle' && (
-              <p className={`form-status ${formStatus.type}`}>{formStatus.message}</p>
-            )}
-          </form>
+
+            <div className="tc-track">
+              {testimonials.map((t, idx) => (
+                <div key={t.name} className={`tc-slide ${idx === currentTestimonial ? 'active' : ''}`} aria-hidden={idx !== currentTestimonial}>
+                  <div className="testimonial-card">
+                    <div className="testimonial-header">
+                      <div className="avatar-fallback" aria-hidden="true">{t.name.substring(0,1)}</div>
+                      <div className="testimonial-info">
+                        <h5>{t.name}</h5>
+                        <div className="testimonial-stars">{'★'.repeat(t.stars)}{'☆'.repeat(5 - t.stars)}</div>
+                      </div>
+                    </div>
+                    <p className="testimonial-text">“{t.text}”</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button
+              className="tc-nav next"
+              aria-label="Next review"
+              onClick={() => setCurrentTestimonial((i) => (i + 1) % testimonials.length)}
+            >
+              ›
+            </button>
+
+            <div className="tc-dots" role="tablist" aria-label="Testimonials">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  role="tab"
+                  aria-selected={i === currentTestimonial}
+                  className={`tc-dot ${i === currentTestimonial ? 'active' : ''}`}
+                  onClick={() => setCurrentTestimonial(i)}
+                  aria-label={`Show review ${i + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Success Stories */}
+        <section id="success" className="section">
+          <div className="section-header">
+            <span className="section-tag">Success Stories</span>
+            <h2 className="section-title">Celebrating Our Newly Qualified Drivers</h2>
+            <p className="section-subtitle">Join hundreds of successful students who've passed with Bash Driving School</p>
+          </div>
+          
+          {/* Success Gallery Grid */}
+          <div className="success-gallery">
+            {[
+              { name: 'Amelia B.', detail: 'Passed in Rochdale', image: success01 },
+              { name: 'Jutt', detail: 'Jutt Passed in 1st attempt in Rochdale', image: success02 },
+              { name: 'Ali', detail: 'Ali passed in Chadderton', image: success03 },
+              { name: 'Tiler', detail: 'Tiler Passed in 1st attempt in Rochdale', image: success04 },
+              { name: 'Abdul', detail: 'Abdul Passed in 1st attempt in Rochdale', image: success05 },
+              { name: 'Maheen', detail: 'Maheen Passed in 1st attempt in Bury', image: success06 },
+              { name: 'Yasir', detail: 'Yasir Passed in 1st attempt in Rochdale', image: success07 },
+              { name: 'Tariq J.', detail: 'Passed in Middleton', image: success08 },
+              { name: 'Sadia', detail: 'Sadia Passed in 1st attempt in Rochdale', image: success09 }
+            ].map((student) => (
+              <div key={student.name} className="success-card">
+                <div className="success-image-wrapper">
+                  <img src={student.image} alt={student.name} />
+                  <div className="success-overlay">
+                    <div className="success-check">✓</div>
+                  </div>
+                </div>
+                <div className="success-info">
+                  <h5>{student.name}</h5>
+                  <p>{student.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Booking Form */}
+        <section id="booking" className="section">
+          <div className="section-header">
+            <span className="section-tag">Book Now</span>
+            <h2 className="section-title">Ready to Start Your Driving Journey?</h2>
+            <p className="section-subtitle">Fill out the form below and we'll get back to you within 24 hours</p>
+          </div>
+          
+          <div className="booking-container">
+            <div className="form-steps">
+              <div className={`form-step ${formStep >= 1 ? 'active' : ''} ${formStep > 1 ? 'completed' : ''}`}>
+                <div className="step-circle">{formStep > 1 ? '✓' : '1'}</div>
+                <span className="step-label">Personal Info</span>
+              </div>
+              <div className={`form-step ${formStep >= 2 ? 'active' : ''} ${formStep > 2 ? 'completed' : ''}`}>
+                <div className="step-circle">{formStep > 2 ? '✓' : '2'}</div>
+                <span className="step-label">Lesson Details</span>
+              </div>
+              <div className={`form-step ${formStep >= 3 ? 'active' : ''}`}>
+                <div className="step-circle">3</div>
+                <span className="step-label">Submit</span>
+              </div>
+            </div>
+
+            <form onSubmit={handleBookingSubmit}>
+              {formStatus.type !== 'idle' && formStatus.type !== 'loading' && (
+                <div className="form-status-message" style={{
+                  padding: 'var(--spacing-md)',
+                  borderRadius: 'var(--radius-lg)',
+                  marginBottom: 'var(--spacing-md)',
+                  background: formStatus.type === 'success' ? '#d1fae5' : '#fee2e2',
+                  color: formStatus.type === 'success' ? '#065f46' : '#991b1b',
+                  fontWeight: 600,
+                  fontSize: '0.9375rem'
+                }}>
+                  {formStatus.message}
+                </div>
+              )}
+              
+              {formStep === 1 && (
+                <>
+                  <div className="form-group">
+                    <label>Full Name *</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="John Smith"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Email Address *</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="john.smith@example.com"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Phone Number *</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="07855 595 078"
+                      required
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button type="button" className="btn btn-primary" onClick={nextStep}>
+                      Next Step →
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {formStep === 2 && (
+                <>
+                  <div className="form-group">
+                    <label>Lesson Type *</label>
+                    <select
+                      name="lessonType"
+                      value={formData.lessonType}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="">Select your preferred lesson type</option>
+                      <option value="Manual Lessons">Manual Lessons</option>
+                      <option value="Automatic Lessons">Automatic Lessons</option>
+                      <option value="Intensive Course">Intensive Course</option>
+                      <option value="Pass Plus">Pass Plus</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Pick-up Address *</label>
+                    <textarea
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      rows={3}
+                      placeholder="Street address, town, postcode (e.g., 123 High Street, Manchester, M1 1AA)"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Your Availability</label>
+                    <input
+                      type="text"
+                      name="availability"
+                      value={formData.availability}
+                      onChange={handleInputChange}
+                      placeholder="e.g., Weekdays after 5pm, Weekends"
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button type="button" className="btn btn-ghost" onClick={prevStep}>
+                      ← Back
+                    </button>
+                    <button type="button" className="btn btn-primary" onClick={nextStep}>
+                      Next Step →
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {formStep === 3 && (
+                <>
+                  <div className="form-group">
+                    <label>Additional Information</label>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      rows={4}
+                      placeholder="Tell us about your experience level or any questions you have"
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button type="button" className="btn btn-ghost" onClick={prevStep}>
+                      ← Back
+                    </button>
+                    <button type="submit" className="btn btn-warm">
+                      Send Booking Request
+                    </button>
+                  </div>
+                  {formStatus.type !== 'idle' && (
+                    <div style={{
+                      marginTop: 'var(--spacing-md)',
+                      padding: 'var(--spacing-md)',
+                      borderRadius: 'var(--radius-lg)',
+                      background: formStatus.type === 'success' ? '#d1fae5' : formStatus.type === 'error' ? '#fee2e2' : '#e0e7ff',
+                      color: formStatus.type === 'success' ? '#065f46' : formStatus.type === 'error' ? '#991b1b' : '#3730a3',
+                      fontWeight: 600
+                    }}>
+                      {formStatus.message}
+                    </div>
+                  )}
+                </>
+              )}
+            </form>
+          </div>
         </section>
       </main>
 
+      {/* Footer */}
       <footer className="footer">
-        <div className="footer-brand">
-          <img src={logo} alt="Bash Driving School logo" />
-          <p>
-            Helping Manchester learners drive confidently with structured lessons, progress reports,
-            and warm instructors.
-          </p>
-        </div>
-        <div className="footer-links">
-          <div>
+        <div className="footer-content">
+          <div className="footer-column">
+            <h5>Bash Driving School</h5>
+            <p>
+              Professional driving instruction across Greater Manchester since 2012. 
+              Helping learners become safe, confident drivers with expert tuition and personalized support.
+            </p>
+            <div className="footer-social">
+              <a href="https://www.facebook.com/bashdrivingschool" className="social-icon" target="_blank" rel="noreferrer" title="Follow us on Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+              <a href="https://www.tiktok.com/@bashdriving" className="social-icon" target="_blank" rel="noreferrer" title="Follow us on TikTok">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+          
+          <div className="footer-column">
             <h5>Quick Links</h5>
             <ul>
-              {navLinks.slice(0, 5).map((link) => (
-                <li key={`footer-${link.id}`}>
-                  <button type="button" onClick={() => smoothScroll(link.id)}>
-                    {link.label}
-                  </button>
-                </li>
-              ))}
+              <li><button onClick={() => scrollToSection('home')}>Home</button></li>
+              <li><button onClick={() => scrollToSection('about')}>About Us</button></li>
+              <li><button onClick={() => scrollToSection('services')}>Services</button></li>
+              <li><button onClick={() => scrollToSection('courses')}>Courses</button></li>
+              <li><button onClick={() => scrollToSection('pricing')}>Pricing</button></li>
             </ul>
           </div>
-          <div>
-            <h5>Contact</h5>
+          
+          <div className="footer-column">
+            <h5>Training Info</h5>
             <ul>
-              <li>07855 595 078</li>
-              <li>info@bashdrivingschool.com</li>
-              <li>Greater Manchester & Oldham</li>
+              <li>Manual Lessons</li>
+              <li>Automatic Lessons</li>
+              <li>Intensive Courses</li>
+              <li>Pass Plus Training</li>
+              <li>Mock Test Preparation</li>
+            </ul>
+          </div>
+          
+          <div className="footer-column">
+            <h5>Contact Info</h5>
+            <ul>
+              <li>📞 07855 595 078</li>
+              <li>✉️ info@bashdrivingschool.com</li>
+              <li>📍 Greater Manchester & Oldham</li>
+              <li>🕒 Mon - Sun: 8am - 8pm</li>
             </ul>
           </div>
         </div>
-        <div className="footer-socials">
-          <h5>Social</h5>
-          {socialLinks.map((link) => (
-            <a key={link.label} href={link.url} target="_blank" rel="noreferrer" className="icon-link">
-              {link.icon}
-              <span>{link.label}</span>
-            </a>
-          ))}
+        
+        <div className="footer-bottom">
+          <p>© {new Date().getFullYear()} Bash Driving School. All rights reserved. | DVSA Approved Driving Instructors</p>
         </div>
-        <p className="footer-note">© {new Date().getFullYear()} Bash Driving School. All rights reserved.</p>
       </footer>
+
+      {/* Map Overlay */}
+      {mapOverlay?.open && (
+        <div className="map-overlay" role="dialog" aria-modal="true" aria-label={`${mapOverlay.city} map`} onClick={() => setMapOverlay({ open: false, city: '', query: '' })}>
+          <div className="map-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="map-modal-header">
+              <h4>{mapOverlay.city}</h4>
+              <button className="map-close" aria-label="Close map" onClick={() => setMapOverlay({ open: false, city: '', query: '' })}>✕</button>
+            </div>
+            <iframe
+              title={`${mapOverlay.city} map`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(mapOverlay.query)}&output=embed`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* WhatsApp Floating Button */}
+      <a 
+        href="https://wa.me/447855595078?text=Hi%20Bash%20Driving%20School%2C%20I%20would%20like%20to%20book%20a%20driving%20lesson" 
+        className="whatsapp-float"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat on WhatsApp"
+        title="Chat with us on WhatsApp"
+      >
+        <svg viewBox="0 0 24 24" fill="white" width="32" height="32">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+      </a>
     </div>
   )
 }

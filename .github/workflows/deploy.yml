@@ -1,0 +1,69 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            server/package-lock.json
+            frontend/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: server
+        run: npm ci
+
+      - name: Install frontend dependencies and build
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to Hostinger via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script: |
+            set -e
+
+            if [ ! -d /opt/bash-driving ]; then
+              mkdir -p /opt/bash-driving
+            fi
+
+            cd /opt/bash-driving
+
+            if [ ! -d Bash-Driving ]; then
+              git clone https://github.com/mfarhan-113/Bash-Driving.git
+              cd Bash-Driving
+            else
+              cd Bash-Driving
+              git fetch origin
+              git reset --hard origin/main
+            fi
+
+            if docker compose version >/dev/null 2>&1; then
+              docker compose pull || true
+              docker compose up -d --build
+            elif command -v docker-compose >/dev/null 2>&1; then
+              docker-compose pull || true
+              docker-compose up -d --build
+            else
+              echo "Docker Compose is not installed" >&2
+              exit 1
+            fi
