@@ -538,14 +538,14 @@ function App() {
           {/* Success Gallery Grid */}
           <div className="success-gallery">
             {[
-              { name: 'Amelia B.', detail: 'Passed in Rochdale', image: success01 },
+              // { name: 'Amelia B.', detail: 'Passed in Rochdale', image: success01 },
               { name: 'Jutt', detail: 'Jutt Passed in 1st attempt in Rochdale', image: success02 },
               { name: 'Ali', detail: 'Ali passed in Chadderton', image: success03 },
               { name: 'Tiler', detail: 'Tiler Passed in 1st attempt in Rochdale', image: success04 },
               { name: 'Abdul', detail: 'Abdul Passed in 1st attempt in Rochdale', image: success05 },
               { name: 'Maheen', detail: 'Maheen Passed in 1st attempt in Bury', image: success06 },
               { name: 'Yasir', detail: 'Yasir Passed in 1st attempt in Rochdale', image: success07 },
-              { name: 'Tariq J.', detail: 'Passed in Middleton', image: success08 },
+              { name: 'Dale', detail: 'Dale Passed in 1st attempt in Rochdale', image: success08 },
               { name: 'Sadia', detail: 'Sadia Passed in 1st attempt in Rochdale', image: success09 }
             ].map((student) => (
               <div key={student.name} className="success-card">
