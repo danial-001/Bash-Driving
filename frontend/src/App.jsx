@@ -219,7 +219,7 @@ function App() {
           <div className="hero-content fade-in">
             <h1>Pass Your Driving Test with Confidence & Expert Skill</h1>
             <p className="hero-subtitle">
-              Professional DVSA-approved instruction across Greater Manchester. 
+              Professional DVSA-approved instruction across Birmingham. 
               Learn with patient, experienced instructors in modern dual-control vehicles. 
               Manual & Automatic lessons available 7 days a week.
             </p>
@@ -275,7 +275,7 @@ function App() {
             <span className="section-tag">About Us</span>
             <h2 className="section-title">Professional Driving Instruction You Can Trust</h2>
             <p className="section-subtitle">
-              Since 2012, Bash Driving School has been the premier choice for learner drivers across Greater Manchester. 
+              Since 2012, Bash Driving School has been the premier choice for learner drivers across Birmingham. 
               Our DVSA-approved instructors provide patient, professional instruction in modern, well-maintained vehicles. 
               Every student receives personalized lesson plans, detailed progress tracking, and continuous support throughout their learning journey.
             </p>
@@ -436,17 +436,54 @@ function App() {
         <section id="areas" className="section">
           <div className="section-header">
             <span className="section-tag">Service Areas</span>
-            <h2 className="section-title">Serving Greater Manchester & Surrounding Areas</h2>
+            <h2 className="section-title">Serving Birmingham & Surrounding Areas</h2>
             <p className="section-subtitle">Professional instruction available across the region</p>
           </div>
           <div className="card-grid">
             {[
-              { name: 'Rochdale'  , map: 'Rochdale,+UK' },
-              { name: 'Manchester', map: 'Manchester,+UK' },
-              { name: 'Bury', map: 'Bury,+Greater+Manchester,+UK' },
-              { name: 'Oldham', map: 'Oldham,+UK' },
-              { name: 'Middleton', map: 'Middleton,+Greater+Manchester,+UK' },
-              { name: 'Bacup', map: 'Bacup,+UK' }
+              { name: 'Acocks Green', map: 'Acocks+Green,+Birmingham,+UK' },
+              { name: 'Alum Rock', map: 'Alum+Rock,+Birmingham,+UK' },
+              { name: 'Aston', map: 'Aston,+Birmingham,+UK' },
+              { name: 'Balsall Heath', map: 'Balsall+Heath,+Birmingham,+UK' },
+              { name: 'Bartley Green', map: 'Bartley+Green,+Birmingham,+UK' },
+              { name: 'Barnt Green', map: 'Barnt+Green,+Birmingham,+UK' },
+              { name: 'Billesley', map: 'Billesley,+Birmingham,+UK' },
+              { name: 'Bordesley Green', map: 'Bordesley+Green,+Birmingham,+UK' },
+              { name: 'Castle Bromwich', map: 'Castle+Bromwich,+Birmingham,+UK' },
+              { name: 'Castle Vale', map: 'Castle+Vale,+Birmingham,+UK' },
+              { name: 'Chelmsley Wood', map: 'Chelmsley+Wood,+Birmingham,+UK' },
+              { name: 'Edgbaston', map: 'Edgbaston,+Birmingham,+UK' },
+              { name: 'Erdington', map: 'Erdington,+Birmingham,+UK' },
+              { name: 'Garretts Green', map: 'Garretts+Green,+Birmingham,+UK' },
+              { name: 'Great Barr', map: 'Great+Barr,+Birmingham,+UK' },
+              { name: 'Hall Green', map: 'Hall+Green,+Birmingham,+UK' },
+              { name: 'Handsworth', map: 'Handsworth,+Birmingham,+UK' },
+              { name: 'Hodge Hill', map: 'Hodge+Hill,+Birmingham,+UK' },
+              { name: 'Kings Heath', map: 'Kings+Heath,+Birmingham,+UK' },
+              { name: 'Kings Norton', map: 'Kings+Norton,+Birmingham,+UK' },
+              { name: 'Kingstanding', map: 'Kingstanding,+Birmingham,+UK' },
+              { name: 'Kitts Green', map: 'Kitts+Green,+Birmingham,+UK' },
+              { name: 'Lozells', map: 'Lozells,+Birmingham,+UK' },
+              { name: 'Marston Green', map: 'Marston+Green,+Birmingham,+UK' },
+              { name: 'Moseley', map: 'Moseley,+Birmingham,+UK' },
+              { name: 'Northfield', map: 'Northfield,+Birmingham,+UK' },
+              { name: 'Olton', map: 'Olton,+Birmingham,+UK' },
+              { name: 'Perry Barr', map: 'Perry+Barr,+Birmingham,+UK' },
+              { name: 'Quinton', map: 'Quinton,+Birmingham,+UK' },
+              { name: 'Selly Oak', map: 'Selly+Oak,+Birmingham,+UK' },
+              { name: 'Shard End', map: 'Shard+End,+Birmingham,+UK' },
+              { name: 'Sheldon', map: 'Sheldon,+Birmingham,+UK' },
+              { name: 'Shirley', map: 'Shirley,+Birmingham,+UK' },
+              { name: 'Small Heath', map: 'Small+Heath,+Birmingham,+UK' },
+              { name: 'Solihull', map: 'Solihull,+Birmingham,+UK' },
+              { name: 'Sparkhill', map: 'Sparkhill,+Birmingham,+UK' },
+              { name: 'Sparkbrook', map: 'Sparkbrook,+Birmingham,+UK' },
+              { name: 'Stechford', map: 'Stechford,+Birmingham,+UK' },
+              { name: 'Stirchley', map: 'Stirchley,+Birmingham,+UK' },
+              { name: 'Tyseley', map: 'Tyseley,+Birmingham,+UK' },
+              { name: 'Washwood Heath', map: 'Washwood+Heath,+Birmingham,+UK' },
+              { name: 'Winson Green', map: 'Winson+Green,+Birmingham,+UK' },
+              { name: 'Yardley', map: 'Yardley,+Birmingham,+UK' }
             ].map((area) => (
               <button 
                 key={area.name}
@@ -740,7 +777,7 @@ function App() {
           <div className="footer-column">
             <h5>Bash Driving School</h5>
             <p>
-              Professional driving instruction across Greater Manchester since 2012. 
+              Professional driving instruction across Birmingham since 2012. 
               Helping learners become safe, confident drivers with expert tuition and personalized support.
             </p>
             <div className="footer-social">
@@ -784,7 +821,7 @@ function App() {
             <ul>
               <li>📞 +44 7855 595078</li>
               <li>✉️ info@bashdrivingschool.com</li>
-              <li>📍 19 Clover Hall Crescent Rochdale OL16 2TR</li>
+              <li>📍 6 Whitehall Road, Birmingham, B9 5EJ</li>
               <li>🕒 Mon - Sun: 8am - 8pm</li>
             </ul>
           </div>
